@@ -1,0 +1,12 @@
+template_path: remote-templates/vpc.yaml
+stack_name: defaultvpc
+dependencies:
+  - bootstrap
+parameters:
+  VpcSubnetPrefix: "10.13"
+  PrivateSubnetZones: "us-east-1c, us-east-1d, us-east-1e"
+  PublicSubnetZones: "us-east-1c, us-east-1d, us-east-1e"
+  VpcName: sagedefaultvpc
+hooks:
+  before_update:
+    - !cmd "curl https://raw.githubusercontent.com/Sage-Bionetworks/aws-infra/master/templates/vpc.yaml --create-dirs -o remote-templates/vpc.yaml"
