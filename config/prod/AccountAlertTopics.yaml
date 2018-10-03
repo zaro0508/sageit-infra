@@ -5,7 +5,7 @@ dependencies:
 parameters:
   InitialSubscriberEmail: "sage-it@sagebase.org"
   EnableSubscriberSMS: "false"
-  BillingThreshold: "1000"
+  BillingThreshold: "2000"
   DeployLambda: "true"
   SlackWebhookURL: !ssm /infra/SlackWebhookUrl
   SlackChannel: "#infra-notices"
