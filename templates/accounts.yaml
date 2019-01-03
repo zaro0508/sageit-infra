@@ -133,7 +133,6 @@ Resources:
   AWSIAMAmpadPortalUpdatePolicy:
     Type: "AWS::IAM::ManagedPolicy"
     Properties:
-      PolicyName: "ampadportalupdate"
       PolicyDocument:
         Version: '2012-10-17'
         Statement:
@@ -162,7 +161,6 @@ Resources:
   AWSIAMNfPortalUpdatePolicy:
     Type: "AWS::IAM::ManagedPolicy"
     Properties:
-      PolicyName: "nfportalupdate"
       PolicyDocument:
         Version: '2012-10-17'
         Statement:
