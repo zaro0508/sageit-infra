@@ -32,6 +32,17 @@ Resources:
       LoginProfile:
         Password: !Ref InitNewUserPassword
         PasswordResetRequired: true
+  AWSIAMMichaelLeeUser:
+    Type: 'AWS::IAM::User'
+    Properties:
+      UserName: michael.lee@sagebase.org
+      Groups:
+        - !Ref AWSIAMAllUsersGroup
+        - !Ref AWSIAMAmpadPortalUpdaterGroup
+        - !Ref AWSIAMNfPortalUpdaterGroup
+      LoginProfile:
+        Password: !Ref InitNewUserPassword
+        PasswordResetRequired: true
   AWSIAMDeveloperUsersGroup:
     Type: 'AWS::IAM::Group'
     Properties:
@@ -118,6 +129,65 @@ Resources:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/job-function/Billing
         - !Ref AWSIAMOrganizationsFullAccessPolicy
+  # Policies to update static portals
+  AWSIAMAmpadPortalUpdatePolicy:
+    Type: "AWS::IAM::Policy"
+    Properties:
+      PolicyName: "ampadportalupdate"
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Action:
+          - s3:ListBucket
+          Resource:
+          - arn:aws:s3:::ampadportal.org
+          - arn:aws:s3:::staging.ampadportal.org
+          - arn:aws:s3:::static.ampadportal.org
+        - Effect: Allow
+          Action:
+          - s3:PutObject
+          - s3:GetObject
+          - s3:DeleteObject
+          - s3:PutObjectAcl
+          Resource:
+          - arn:aws:s3:::ampadportal.org/*
+          - arn:aws:s3:::staging.ampadportal.org/*
+          - arn:aws:s3:::static.ampadportal.org/*
+  AWSIAMAmpadPortalUpdaterGroup:
+    Type: 'AWS::IAM::Group'
+    Properties:
+      ManagedPolicyArns:
+        - !Ref AWSIAMAmpadPortalUpdatePolicy
+  AWSIAMNfPortalUpdatePolicy:
+    Type: "AWS::IAM::Policy"
+    Properties:
+      PolicyName: "nfportalupdate"
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Action:
+          - s3:ListBucket
+          Resource:
+          - arn:aws:s3:::nf.synapse.org
+          - arn:aws:s3:::staging.nf.synapse.org
+          - arn:aws:s3:::static.nf.synapse.org
+        - Effect: Allow
+          Action:
+          - s3:PutObject
+          - s3:GetObject
+          - s3:DeleteObject
+          - s3:PutObjectAcl
+          Resource:
+          - arn:aws:s3:::nf.synapse.org/*
+          - arn:aws:s3:::staging.nf.synapse.org/*
+          - arn:aws:s3:::static.nf.synapse.org/*
+  AWSIAMNfPortalUpdaterGroup:
+    Type: 'AWS::IAM::Group'
+    Properties:
+      ManagedPolicyArns:
+        - !Ref AWSIAMNfPortalUpdatePolicy
   # policy to enforce MFA
   AWSIAMEnforceMfaPolicy:
     Type: 'AWS::IAM::ManagedPolicy'
