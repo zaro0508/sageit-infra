@@ -131,7 +131,7 @@ Resources:
         - !Ref AWSIAMOrganizationsFullAccessPolicy
   # Policies to update static portals
   AWSIAMAmpadPortalUpdatePolicy:
-    Type: "AWS::IAM::Policy"
+    Type: "AWS::IAM::ManagedPolicy"
     Properties:
       PolicyName: "ampadportalupdate"
       PolicyDocument:
@@ -160,7 +160,7 @@ Resources:
       ManagedPolicyArns:
         - !Ref AWSIAMAmpadPortalUpdatePolicy
   AWSIAMNfPortalUpdatePolicy:
-    Type: "AWS::IAM::Policy"
+    Type: "AWS::IAM::ManagedPolicy"
     Properties:
       PolicyName: "nfportalupdate"
       PolicyDocument:
