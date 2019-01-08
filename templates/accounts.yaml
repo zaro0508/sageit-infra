@@ -186,6 +186,56 @@ Resources:
     Properties:
       ManagedPolicyArns:
         - !Ref AWSIAMNfPortalUpdatePolicy
+  # EC2 instance role to deploy portals
+  AWSIAMPortalDeployerPolicy:
+    Type: 'AWS::IAM::Policy'
+    Properties:
+      PolicyDocument:
+        Version: '2012-10-17'
+        - Effect: Allow
+          Action:
+          - s3:ListBucket
+          Resource:
+          - arn:aws:s3:::ampadportal.org
+          - arn:aws:s3:::staging.ampadportal.org
+          - arn:aws:s3:::static.ampadportal.org
+          - arn:aws:s3:::nf.synapse.org
+          - arn:aws:s3:::staging.nf.synapse.org
+          - arn:aws:s3:::static.nf.synapse.org
+        - Effect: Allow
+          Action:
+          - s3:PutObject
+          - s3:GetObject
+          - s3:DeleteObject
+          - s3:PutObjectAcl
+          Resource:
+          - arn:aws:s3:::ampadportal.org/*
+          - arn:aws:s3:::staging.ampadportal.org/*
+          - arn:aws:s3:::static.ampadportal.org/*
+          - arn:aws:s3:::nf.synapse.org/*
+          - arn:aws:s3:::staging.nf.synapse.org/*
+          - arn:aws:s3:::static.nf.synapse.org/*
+      Roles:
+        - !Ref AWSIAMPortalDeployerRole
+  AWSIAMPortalDeployerRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          -
+            Effect: "Allow"
+            Principal:
+              Service: 'ec2.amazonaws.com'
+            Action:
+              - "sts:AssumeRole"
+      Path: "/"
+  AWSIAMPortalDeployerInstanceProfile:
+    Type: 'AWS::IAM::InstanceProfile'
+    Properties: 
+      Path: "/"
+      Roles:
+        - !Ref AWSIAMAmpadPortalDeployerRole
   # policy to enforce MFA
   AWSIAMEnforceMfaPolicy:
     Type: 'AWS::IAM::ManagedPolicy'
