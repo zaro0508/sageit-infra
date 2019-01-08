@@ -236,7 +236,7 @@ Resources:
     Properties: 
       Path: "/"
       Roles:
-        - !Ref AWSIAMAmpadPortalDeployerRole
+        - !Ref AWSIAMPortalDeployerRole
   # policy to enforce MFA
   AWSIAMEnforceMfaPolicy:
     Type: 'AWS::IAM::ManagedPolicy'
