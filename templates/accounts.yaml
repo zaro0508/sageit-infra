@@ -190,6 +190,7 @@ Resources:
   AWSIAMPortalDeployerPolicy:
     Type: 'AWS::IAM::Policy'
     Properties:
+      PolicyName: "portaldeployer"
       PolicyDocument:
         Version: '2012-10-17'
         Statement:
