@@ -40,6 +40,7 @@ Resources:
         - !Ref AWSIAMAllUsersGroup
         - !Ref AWSIAMAmpadPortalUpdaterGroup
         - !Ref AWSIAMNfPortalUpdaterGroup
+        - !Ref AWSIAMCsbcPsonPortalUpdaterGroup
       LoginProfile:
         Password: !Ref InitNewUserPassword
         PasswordResetRequired: true
@@ -186,6 +187,32 @@ Resources:
     Properties:
       ManagedPolicyArns:
         - !Ref AWSIAMNfPortalUpdatePolicy
+  AWSIAMCsbcPsonPortalUpdatePolicy:
+    Type: "AWS::IAM::ManagedPolicy"
+    Properties:
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Action:
+          - s3:ListBucket
+          Resource:
+          - arn:aws:s3:::prod.csbc-pson.synapse.org
+          - arn:aws:s3:::staging.csbc-pson.synapse.org
+        - Effect: Allow
+          Action:
+          - s3:PutObject
+          - s3:GetObject
+          - s3:DeleteObject
+          - s3:PutObjectAcl
+          Resource:
+          - arn:aws:s3:::prod.csbc-pson.synapse.org/*
+          - arn:aws:s3:::staging.csbc-pson.synapse.org/*
+  AWSIAMCsbcPsonPortalUpdaterGroup:
+    Type: 'AWS::IAM::Group'
+    Properties:
+      ManagedPolicyArns:
+        - !Ref AWSIAMCsbcPsonPortalUpdatePolicy
   # EC2 instance role to deploy portals
   AWSIAMPortalDeployerPolicy:
     Type: 'AWS::IAM::Policy'
@@ -204,6 +231,8 @@ Resources:
           - arn:aws:s3:::prod.nf.synapse.org
           - arn:aws:s3:::staging.nf.synapse.org
           - arn:aws:s3:::static.nf.synapse.org
+          - arn:aws:s3:::prod.csbc-pson.synapse.org
+          - arn:aws:s3:::staging.csbc-pson.synapse.org
         - Effect: Allow
           Action:
           - s3:PutObject
@@ -217,6 +246,8 @@ Resources:
           - arn:aws:s3:::prod.nf.synapse.org/*
           - arn:aws:s3:::staging.nf.synapse.org/*
           - arn:aws:s3:::static.nf.synapse.org/*
+          - arn:aws:s3:::prod.csbc-pson.synapse.org/*
+          - arn:aws:s3:::staging.csbc-pson.synapse.org/*
       Roles:
         - !Ref AWSIAMPortalDeployerRole
   AWSIAMPortalDeployerRole:
