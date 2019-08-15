@@ -236,6 +236,8 @@ Resources:
           Action:
           - s3:ListBucket
           Resource:
+          - arn:aws:s3:::adknowledgeportal.synapse.org
+          - arn:aws:s3:::staging.adknowledgeportal.synapse.org
           - arn:aws:s3:::ampadportal.org
           - arn:aws:s3:::staging.ampadportal.org
           - arn:aws:s3:::static.ampadportal.org
@@ -251,6 +253,8 @@ Resources:
           - s3:DeleteObject
           - s3:PutObjectAcl
           Resource:
+          - arn:aws:s3:::adknowledgeportal.synapse.org/*
+          - arn:aws:s3:::staging.adknowledgeportal.synapse.org/*
           - arn:aws:s3:::ampadportal.org/*
           - arn:aws:s3:::staging.ampadportal.org/*
           - arn:aws:s3:::static.ampadportal.org/*
