@@ -303,7 +303,7 @@ Resources:
             Resource: "*"
             Condition:
               BoolIfExists:
-                aws:MultiFactorAuthPresent: false
+                'aws:MultiFactorAuthPresent': 'false'
 Outputs:
   AWSIAMEnforceMfaPolicy:
     Value: !Ref AWSIAMEnforceMfaPolicy
