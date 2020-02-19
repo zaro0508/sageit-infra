@@ -11,7 +11,7 @@ Resources:
   #    MFA device, access-keys, ssh-keys, and policies.
   # 2. Detach the user from all groups.
   AWSIAMXavierSchildwachterUser:
-    Type: 'AWS::IAM::User'
+    Type: AWS::IAM::User
     Properties:
       UserName: x.schildwachter@sagebase.org
       Groups:
@@ -22,7 +22,7 @@ Resources:
         Password: !Ref InitNewUserPassword
         PasswordResetRequired: true
   AWSIAMKhaiDoUser:
-    Type: 'AWS::IAM::User'
+    Type: AWS::IAM::User
     Properties:
       UserName: khai.do@sagebase.org
       Groups:
@@ -33,19 +33,16 @@ Resources:
         Password: !Ref InitNewUserPassword
         PasswordResetRequired: true
   AWSIAMMichaelLeeUser:
-    Type: 'AWS::IAM::User'
+    Type: AWS::IAM::User
     Properties:
       UserName: michael.lee@sagebase.org
       Groups:
         - !Ref AWSIAMAllUsersGroup
-        - !Ref AWSIAMAmpadPortalUpdaterGroup
-        - !Ref AWSIAMNfPortalUpdaterGroup
-        - !Ref AWSIAMCsbcPsonPortalUpdaterGroup
       LoginProfile:
         Password: !Ref InitNewUserPassword
         PasswordResetRequired: true
   AWSIAMAaronHaydenUser:
-    Type: 'AWS::IAM::User'
+    Type: AWS::IAM::User
     Properties:
       UserName: aaron.hayden@sagebase.org
       Groups:
@@ -55,7 +52,7 @@ Resources:
         Password: !Ref InitNewUserPassword
         PasswordResetRequired: true
   AWSIAMDeveloperUsersGroup:
-    Type: 'AWS::IAM::Group'
+    Type: AWS::IAM::Group
     Properties:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/PowerUserAccess
@@ -63,26 +60,26 @@ Resources:
         - !Ref AWSIAMDynamoDenyDeletePolicy
         - !Ref AWSIAMRdsDenyDeletePolicy
   AWSIAMAdminRole:
-    Type: "AWS::IAM::Role"
+    Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
-        Version: "2012-10-17"
+        Version: 2012-10-17
         Statement:
           -
-            Effect: "Allow"
+            Effect: Allow
             Principal:
               AWS:
                 - !GetAtt AWSIAMXavierSchildwachterUser.Arn
                 - !GetAtt AWSIAMKhaiDoUser.Arn
                 - !GetAtt AWSIAMAaronHaydenUser.Arn
             Action:
-              - "sts:AssumeRole"
-      Path: "/"
+              - sts:AssumeRole
+      Path: /
   AWSIAMDynamoDenyDeletePolicy:
-    Type: 'AWS::IAM::ManagedPolicy'
+    Type: AWS::IAM::ManagedPolicy
     Properties:
       PolicyDocument:
-        Version: '2012-10-17'
+        Version: 2012-10-17
         Statement:
           -
             Effect: Deny
@@ -92,10 +89,10 @@ Resources:
               - dynamodb:DeleteTable
             Resource: "*"
   AWSIAMRdsDenyDeletePolicy:
-    Type: 'AWS::IAM::ManagedPolicy'
+    Type: AWS::IAM::ManagedPolicy
     Properties:
       PolicyDocument:
-        Version: '2012-10-17'
+        Version: 2012-10-17
         Statement:
           -
             Effect: Deny
@@ -106,187 +103,108 @@ Resources:
               - rds:DeleteDBSnapshot
             Resource: "*"
   AWSIAMOrganizationsFullAccessPolicy:
-    Type: 'AWS::IAM::ManagedPolicy'
+    Type: AWS::IAM::ManagedPolicy
     Properties:
       PolicyDocument:
-        Version: '2012-10-17'
+        Version: 2012-10-17
         Statement:
           -
-            Effect: "Allow"
-            Action: "organizations:*"
+            Effect: Allow
+            Action: organizations:*
             Resource: "*"
   AWSIAMAdminRolePolicy:
-    Type: "AWS::IAM::Policy"
+    Type: AWS::IAM::Policy
     Properties:
-      PolicyName: "admin"
+      PolicyName: admin
       PolicyDocument:
-        Version: "2012-10-17"
+        Version: 2012-10-17
         Statement:
           -
-            Effect: "Allow"
+            Effect: Allow
             Action: "*"
             Resource: "*"
       Roles:
         -
           !Ref AWSIAMAdminRole
   AWSIAMAllUsersGroup:
-    Type: 'AWS::IAM::Group'
+    Type: AWS::IAM::Group
     Properties:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/ReadOnlyAccess
         - !Ref AWSIAMEnforceMfaPolicy
   AWSIAMBillingManagersGroup:
-    Type: 'AWS::IAM::Group'
+    Type: AWS::IAM::Group
     Properties:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/job-function/Billing
         - !Ref AWSIAMOrganizationsFullAccessPolicy
-  # Policies to update static portals
-  AWSIAMAmpadPortalUpdatePolicy:
-    Type: "AWS::IAM::ManagedPolicy"
-    Properties:
-      PolicyDocument:
-        Version: '2012-10-17'
-        Statement:
-        - Effect: Allow
-          Action:
-          - s3:ListBucket
-          Resource:
-          - arn:aws:s3:::ampadportal.org
-          - arn:aws:s3:::staging.ampadportal.org
-          - arn:aws:s3:::static.ampadportal.org
-        - Effect: Allow
-          Action:
-          - s3:PutObject
-          - s3:GetObject
-          - s3:DeleteObject
-          - s3:PutObjectAcl
-          Resource:
-          - arn:aws:s3:::ampadportal.org/*
-          - arn:aws:s3:::staging.ampadportal.org/*
-          - arn:aws:s3:::static.ampadportal.org/*
-  AWSIAMAmpadPortalUpdaterGroup:
-    Type: 'AWS::IAM::Group'
-    Properties:
-      ManagedPolicyArns:
-        - !Ref AWSIAMAmpadPortalUpdatePolicy
-  AWSIAMNfPortalUpdatePolicy:
-    Type: "AWS::IAM::ManagedPolicy"
-    Properties:
-      PolicyDocument:
-        Version: '2012-10-17'
-        Statement:
-        - Effect: Allow
-          Action:
-          - s3:ListBucket
-          Resource:
-          - arn:aws:s3:::prod.nf.synapse.org
-          - arn:aws:s3:::staging.nf.synapse.org
-          - arn:aws:s3:::static.nf.synapse.org
-        - Effect: Allow
-          Action:
-          - s3:PutObject
-          - s3:GetObject
-          - s3:DeleteObject
-          - s3:PutObjectAcl
-          Resource:
-          - arn:aws:s3:::prod.nf.synapse.org/*
-          - arn:aws:s3:::staging.nf.synapse.org/*
-          - arn:aws:s3:::static.nf.synapse.org/*
-  AWSIAMNfPortalUpdaterGroup:
-    Type: 'AWS::IAM::Group'
-    Properties:
-      ManagedPolicyArns:
-        - !Ref AWSIAMNfPortalUpdatePolicy
-  AWSIAMCsbcPsonPortalUpdatePolicy:
-    Type: "AWS::IAM::ManagedPolicy"
-    Properties:
-      PolicyDocument:
-        Version: '2012-10-17'
-        Statement:
-        - Effect: Allow
-          Action:
-          - s3:ListBucket
-          Resource:
-          - arn:aws:s3:::prod.csbc-pson.synapse.org
-          - arn:aws:s3:::staging.csbc-pson.synapse.org
-        - Effect: Allow
-          Action:
-          - s3:PutObject
-          - s3:GetObject
-          - s3:DeleteObject
-          - s3:PutObjectAcl
-          Resource:
-          - arn:aws:s3:::prod.csbc-pson.synapse.org/*
-          - arn:aws:s3:::staging.csbc-pson.synapse.org/*
-  AWSIAMCsbcPsonPortalUpdaterGroup:
-    Type: 'AWS::IAM::Group'
-    Properties:
-      ManagedPolicyArns:
-        - !Ref AWSIAMCsbcPsonPortalUpdatePolicy
   # EC2 instance role to deploy portals
   AWSIAMPortalDeployerPolicy:
-    Type: 'AWS::IAM::Policy'
+    Type: AWS::IAM::Policy
     Properties:
-      PolicyName: "portaldeployer"
+      PolicyName: portaldeployer
       PolicyDocument:
-        Version: '2012-10-17'
+        Version: 2012-10-17
         Statement:
+        # S3
         - Effect: Allow
           Action:
+          - s3:CreateBucket
           - s3:ListBucket
-          Resource:
-          - arn:aws:s3:::adknowledgeportal.synapse.org
-          - arn:aws:s3:::staging.adknowledgeportal.synapse.org
-          - arn:aws:s3:::ampadportal.org
-          - arn:aws:s3:::staging.ampadportal.org
-          - arn:aws:s3:::static.ampadportal.org
-          - arn:aws:s3:::prod.nf.synapse.org
-          - arn:aws:s3:::staging.nf.synapse.org
-          - arn:aws:s3:::static.nf.synapse.org
-          - arn:aws:s3:::prod.csbc-pson.synapse.org
-          - arn:aws:s3:::staging.csbc-pson.synapse.org
-        - Effect: Allow
-          Action:
           - s3:PutObject
           - s3:GetObject
           - s3:DeleteObject
           - s3:PutObjectAcl
-          Resource:
-          - arn:aws:s3:::adknowledgeportal.synapse.org/*
-          - arn:aws:s3:::staging.adknowledgeportal.synapse.org/*
-          - arn:aws:s3:::ampadportal.org/*
-          - arn:aws:s3:::staging.ampadportal.org/*
-          - arn:aws:s3:::static.ampadportal.org/*
-          - arn:aws:s3:::prod.nf.synapse.org/*
-          - arn:aws:s3:::staging.nf.synapse.org/*
-          - arn:aws:s3:::static.nf.synapse.org/*
-          - arn:aws:s3:::prod.csbc-pson.synapse.org/*
-          - arn:aws:s3:::staging.csbc-pson.synapse.org/*
+          Resource: "*"
+        # CFront
+        - Effect: Allow
+          Action:
+          - acm:ListCertificates,
+          - cloudfront:CreateDistribution
+          - cloudfront:DeleteDistribution
+          - cloudfront:GetDistribution
+          - cloudfront:GetDistributionConfig
+          - cloudfront:ListDistributions
+          - cloudfront:UpdateDistribution
+          - cloudfront:ListCloudFrontOriginAccessIdentities
+          - cloudfront:CreateInvalidation
+          - cloudfront:GetInvalidation
+          - cloudfront:ListInvalidations
+          - elasticloadbalancing:DescribeLoadBalancers
+          - iam:ListServerCertificates,
+          - sns:ListSubscriptionsByTopic
+          - sns:ListTopics
+          - waf:GetWebACL
+          - waf:ListWebACLs
+          Resource: "*"
+        # CFormation
+        - Effect: Allow
+          Action: cloudformation:*
+          Resource: "*"
       Roles:
         - !Ref AWSIAMPortalDeployerRole
   AWSIAMPortalDeployerRole:
-    Type: 'AWS::IAM::Role'
+    Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
-        Version: "2012-10-17"
+        Version: 2012-10-17
         Statement:
           -
-            Effect: "Allow"
+            Effect: Allow
             Principal:
-              Service: 'ec2.amazonaws.com'
+              Service: ec2.amazonaws.com
             Action:
-              - "sts:AssumeRole"
-      Path: "/"
+              - sts:AssumeRole
+      Path: /
   AWSIAMPortalDeployerInstanceProfile:
-    Type: 'AWS::IAM::InstanceProfile'
+    Type: AWS::IAM::InstanceProfile
     Properties: 
-      Path: "/"
+      Path: /
       Roles:
         - !Ref AWSIAMPortalDeployerRole
   # policy to enforce MFA
   AWSIAMEnforceMfaPolicy:
-    Type: 'AWS::IAM::ManagedPolicy'
+    Type: AWS::IAM::ManagedPolicy
     Properties:
       PolicyDocument:
         Version: 2012-10-17
@@ -294,95 +212,95 @@ Resources:
           - Sid: AllowAllUsersToListAccounts
             Effect: Allow
             Action:
-              - 'iam:ListAccountAliases'
-              - 'iam:ListUsers'
-              - 'iam:GetAccountSummary'
-            Resource: '*'
+            - iam:ListAccountAliases
+            - iam:ListUsers
+            - iam:GetAccountSummary
+            Resource: "*"
           - Sid: AllowIndividualUserToSeeAndManageOnlyTheirOwnAccountInformation
             Effect: Allow
             Action:
-              - 'iam:ChangePassword'
-              - 'iam:CreateAccessKey'
-              - 'iam:CreateLoginProfile'
-              - 'iam:DeleteAccessKey'
-              - 'iam:DeleteLoginProfile'
-              - 'iam:GetAccountPasswordPolicy'
-              - 'iam:GetLoginProfile'
-              - 'iam:ListAccessKeys'
-              - 'iam:UpdateAccessKey'
-              - 'iam:UpdateLoginProfile'
-              - 'iam:ListSigningCertificates'
-              - 'iam:DeleteSigningCertificate'
-              - 'iam:UpdateSigningCertificate'
-              - 'iam:UploadSigningCertificate'
-              - 'iam:ListSSHPublicKeys'
-              - 'iam:GetSSHPublicKey'
-              - 'iam:DeleteSSHPublicKey'
-              - 'iam:UpdateSSHPublicKey'
-              - 'iam:UploadSSHPublicKey'
+            - iam:ChangePassword
+            - iam:CreateAccessKey
+            - iam:CreateLoginProfile
+            - iam:DeleteAccessKey
+            - iam:DeleteLoginProfile
+            - iam:GetAccountPasswordPolicy
+            - iam:GetLoginProfile
+            - iam:ListAccessKeys
+            - iam:UpdateAccessKey
+            - iam:UpdateLoginProfile
+            - iam:ListSigningCertificates
+            - iam:DeleteSigningCertificate
+            - iam:UpdateSigningCertificate
+            - iam:UploadSigningCertificate
+            - iam:ListSSHPublicKeys
+            - iam:GetSSHPublicKey
+            - iam:DeleteSSHPublicKey
+            - iam:UpdateSSHPublicKey
+            - iam:UploadSSHPublicKey
             Resource: !Join
               - ''
               - - 'arn:aws:iam::'
                 - !Ref AWS::AccountId
-                - ':user/${aws:username}'
+                - :user/${aws:username}
           - Sid: AllowIndividualUserToListOnlyTheirOwnMFA
             Effect: Allow
             Action:
-              - 'iam:ListVirtualMFADevices'
-              - 'iam:ListMFADevices'
+            - iam:ListVirtualMFADevices
+            - iam:ListMFADevices
             Resource:
               - !Join
                 - ''
                 - - 'arn:aws:iam::'
                   - !Ref AWS::AccountId
-                  - ':mfa/*'
+                  - :mfa/*
               - !Join
                 - ''
                 - - 'arn:aws:iam::'
                   - !Ref AWS::AccountId
-                  - ':user/${aws:username}'
+                  - :user/${aws:username}
           - Sid: AllowIndividualUserToManageTheirOwnMFA
             Effect: Allow
             Action:
-              - 'iam:CreateVirtualMFADevice'
-              - 'iam:DeleteVirtualMFADevice'
-              - 'iam:RequestSmsMfaRegistration'
-              - 'iam:FinalizeSmsMfaRegistration'
-              - 'iam:EnableMFADevice'
-              - 'iam:ResyncMFADevice'
+            - iam:CreateVirtualMFADevice
+            - iam:DeleteVirtualMFADevice
+            - iam:RequestSmsMfaRegistration
+            - iam:FinalizeSmsMfaRegistration
+            - iam:EnableMFADevice
+            - iam:ResyncMFADevice
             Resource:
               - !Join
                 - ''
                 - - 'arn:aws:iam::'
                   - !Ref AWS::AccountId
-                  - ':mfa/${aws:username}'
+                  - :mfa/${aws:username}
               - !Join
                 - ''
                 - - 'arn:aws:iam::'
                   - !Ref AWS::AccountId
-                  - ':user/${aws:username}'
+                  - :user/${aws:username}
           - Sid: AllowIndividualUserToDeactivateOnlyTheirOwnMFAOnlyWhenUsingMFA
             Effect: Allow
             Action:
-              - 'iam:DeactivateMFADevice'
+              - iam:DeactivateMFADevice
             Resource:
               - !Join
                 - ''
                 - - 'arn:aws:iam::'
                   - !Ref AWS::AccountId
-                  - ':mfa/${aws:username}'
+                  - :mfa/${aws:username}
               - !Join
                 - ''
                 - - 'arn:aws:iam::'
                   - !Ref AWS::AccountId
-                  - ':user/${aws:username}'
+                  - :user/${aws:username}
             Condition:
               Bool:
                 'aws:MultiFactorAuthPresent': 'true'
           - Sid: BlockAnyAccessOtherThanAboveUnlessSignedInWithMFA
             Effect: Deny
-            NotAction: 'iam:*'
-            Resource: '*'
+            NotAction: iam:*
+            Resource: "*"
             Condition:
               BoolIfExists:
                 'aws:MultiFactorAuthPresent': 'false'
@@ -390,4 +308,4 @@ Outputs:
   AWSIAMEnforceMfaPolicy:
     Value: !Ref AWSIAMEnforceMfaPolicy
     Export:
-      Name: !Sub '${AWS::Region}-${AWS::StackName}-EnforceMfaPolicy'
+      Name: !Sub ${AWS::Region}-${AWS::StackName}-EnforceMfaPolicy
