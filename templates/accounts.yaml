@@ -296,7 +296,7 @@ Resources:
                   - :user/${aws:username}
             Condition:
               Bool:
-                aws:MultiFactorAuthPresent: true
+                'aws:MultiFactorAuthPresent': 'true'
           - Sid: BlockAnyAccessOtherThanAboveUnlessSignedInWithMFA
             Effect: Deny
             NotAction: iam:*
