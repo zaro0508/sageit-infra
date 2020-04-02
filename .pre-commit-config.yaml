@@ -17,4 +17,3 @@ repos:
     rev: v1.1.6
     hooks:
     -   id: remove-tabs
-

@@ -1,3 +1,4 @@
+---
 Description: Setup IAM policies, groups and accounts
 AWSTemplateFormatVersion: 2010-09-09
 Parameters:
@@ -146,33 +147,33 @@ Resources:
       PolicyDocument:
         Version: 2012-10-17
         Statement:
-        # S3
+          # S3
         - Effect: Allow
           Action: "s3:*"
           Resource: "*"
-        # CFront
+          # CFront
         - Effect: Allow
           Action:
-          - acm:ListCertificates,
-          - cloudfront:CreateDistribution
-          - cloudfront:DeleteDistribution
-          - cloudfront:GetDistribution
-          - cloudfront:GetDistributionConfig
-          - cloudfront:ListDistributions
-          - cloudfront:UpdateDistribution
-          - cloudfront:ListCloudFrontOriginAccessIdentities
-          - cloudfront:CreateInvalidation
-          - cloudfront:GetInvalidation
-          - cloudfront:ListInvalidations
-          - cloudfront:TagResource
-          - elasticloadbalancing:DescribeLoadBalancers
-          - iam:ListServerCertificates,
-          - sns:ListSubscriptionsByTopic
-          - sns:ListTopics
-          - waf:GetWebACL
-          - waf:ListWebACLs
+            - acm:ListCertificates,
+            - cloudfront:CreateDistribution
+            - cloudfront:DeleteDistribution
+            - cloudfront:GetDistribution
+            - cloudfront:GetDistributionConfig
+            - cloudfront:ListDistributions
+            - cloudfront:UpdateDistribution
+            - cloudfront:ListCloudFrontOriginAccessIdentities
+            - cloudfront:CreateInvalidation
+            - cloudfront:GetInvalidation
+            - cloudfront:ListInvalidations
+            - cloudfront:TagResource
+            - elasticloadbalancing:DescribeLoadBalancers
+            - iam:ListServerCertificates,
+            - sns:ListSubscriptionsByTopic
+            - sns:ListTopics
+            - waf:GetWebACL
+            - waf:ListWebACLs
           Resource: "*"
-        # CFormation
+          # CFormation
         - Effect: Allow
           Action: cloudformation:*
           Resource: "*"
@@ -193,7 +194,7 @@ Resources:
       Path: /
   AWSIAMPortalDeployerInstanceProfile:
     Type: AWS::IAM::InstanceProfile
-    Properties: 
+    Properties:
       Path: /
       Roles:
         - !Ref AWSIAMPortalDeployerRole
@@ -207,32 +208,32 @@ Resources:
           - Sid: AllowAllUsersToListAccounts
             Effect: Allow
             Action:
-            - iam:ListAccountAliases
-            - iam:ListUsers
-            - iam:GetAccountSummary
+              - iam:ListAccountAliases
+              - iam:ListUsers
+              - iam:GetAccountSummary
             Resource: "*"
           - Sid: AllowIndividualUserToSeeAndManageOnlyTheirOwnAccountInformation
             Effect: Allow
             Action:
-            - iam:ChangePassword
-            - iam:CreateAccessKey
-            - iam:CreateLoginProfile
-            - iam:DeleteAccessKey
-            - iam:DeleteLoginProfile
-            - iam:GetAccountPasswordPolicy
-            - iam:GetLoginProfile
-            - iam:ListAccessKeys
-            - iam:UpdateAccessKey
-            - iam:UpdateLoginProfile
-            - iam:ListSigningCertificates
-            - iam:DeleteSigningCertificate
-            - iam:UpdateSigningCertificate
-            - iam:UploadSigningCertificate
-            - iam:ListSSHPublicKeys
-            - iam:GetSSHPublicKey
-            - iam:DeleteSSHPublicKey
-            - iam:UpdateSSHPublicKey
-            - iam:UploadSSHPublicKey
+              - iam:ChangePassword
+              - iam:CreateAccessKey
+              - iam:CreateLoginProfile
+              - iam:DeleteAccessKey
+              - iam:DeleteLoginProfile
+              - iam:GetAccountPasswordPolicy
+              - iam:GetLoginProfile
+              - iam:ListAccessKeys
+              - iam:UpdateAccessKey
+              - iam:UpdateLoginProfile
+              - iam:ListSigningCertificates
+              - iam:DeleteSigningCertificate
+              - iam:UpdateSigningCertificate
+              - iam:UploadSigningCertificate
+              - iam:ListSSHPublicKeys
+              - iam:GetSSHPublicKey
+              - iam:DeleteSSHPublicKey
+              - iam:UpdateSSHPublicKey
+              - iam:UploadSSHPublicKey
             Resource: !Join
               - ''
               - - 'arn:aws:iam::'

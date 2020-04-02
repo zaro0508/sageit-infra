@@ -22,6 +22,6 @@ jobs:
         - pre-commit autoupdate
         - pre-commit run --all-files
     - stage: deploy
-      script: 
+      script:
          - sceptre launch staging --yes
          - sceptre launch prod --yes
