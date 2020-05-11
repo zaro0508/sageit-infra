@@ -3,7 +3,7 @@ AWSTemplateFormatVersion: 2010-09-09
 Parameters:
   SageitAdminMetadata:
     Type: String
-    Description: "Public certificate for Jumpcloud admincentral-admin app"
+    Description: "Public certificate for Jumpcloud sageit-admin app"
 Resources:
   SageitAdminSamlProvider:
     Type: Custom::SAMLProvider
