@@ -11,7 +11,7 @@ CF_BUCKET="bootstrap-awss3cloudformationbucket-19qromfd235z9"  # in org-sagebase
 
 # deploy rotate-credentials
 curl \
-https://s3.amazonaws.com/$CF_BUCKET/aws-infra/master/rotate-credentials.yaml \
+https://$CF_BUCKET.s3.amazonaws.com/aws-infra/master/rotate-credentials.yaml \
 --create-dirs -o remote-templates/rotate-credentials.yaml
 
 aws cloudformation deploy \
