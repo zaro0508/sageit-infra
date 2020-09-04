@@ -29,26 +29,12 @@ Resources:
       WebsiteConfiguration:
         IndexDocument: index.html
         ErrorDocument: error.html
-      RoutingRules:
-        - RedirectRule:
-            HostName: !Ref RedirectTo
-            Protocol: https
-            HttpRedirectCode: 307
+        RoutingRules:
+          - RedirectRule:
+              HostName: !Ref RedirectTo
+              Protocol: https
+              HttpRedirectCode: 307
     DeletionPolicy: Retain
-  # Not sure this is needed...
-  WebsiteBucketPolicy:
-    Type: AWS::S3::BucketPolicy
-    Properties:
-      PolicyDocument:
-        Id: MyPolicy
-        Version: 2012-10-17
-        Statement:
-          - Sid: PublicReadForGetBucketObjects
-            Effect: Allow
-            Principal: '*'
-            Action: 's3:GetObject'
-            Resource: !Join ['', ['arn:aws:s3:::', !Ref WebsiteBucket, /*]]
-      Bucket: !Ref WebsiteBucket
 
   Cloudfront:
     Type: AWS::CloudFront::Distribution
