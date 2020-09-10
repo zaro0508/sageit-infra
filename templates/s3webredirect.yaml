@@ -14,7 +14,7 @@ Parameters:
     Description: Domain name of the new website (redirected to)
     Type: String
     AllowedPattern: (?!-)[a-zA-Z0-9-.]{1,63}(?<!-)
-    ConstraintDescription: must be a valid DNS zone name.  
+    ConstraintDescription: must be a valid DNS zone name.
   RedirectFromAcmCertArn:
     Type: String
     Description: The Amazon Resource Name (ARN) of an AWS Certificate Manager (ACM) certificate that covers the 'RedirectFrom' site.
@@ -51,7 +51,7 @@ Resources:
         Enabled: true
         HttpVersion: 'http2'
         DefaultRootObject: index.html
-        Aliases: 
+        Aliases:
           -
             !Ref RedirectFrom
         DefaultCacheBehavior:
