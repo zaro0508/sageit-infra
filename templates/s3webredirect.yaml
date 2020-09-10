@@ -33,8 +33,9 @@ Resources:
           - RedirectRule:
               HostName: !Ref RedirectTo
               Protocol: https
-              HttpRedirectCode: 307
+              HttpRedirectCode: "307"
     DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
 
   Cloudfront:
     Type: AWS::CloudFront::Distribution
