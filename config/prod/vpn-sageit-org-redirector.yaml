@@ -8,7 +8,7 @@ stack_tags:
   OwnerEmail: "it@sagebase.org"
 parameters:
   SourceHostName: "vpn.sageit.org"
-  SourceAcmCertificateArn: !stack_output_external "sageit-org-acm-cert::us-east-1-sageit-org-acm-cert-CertificateArn"
+  SourceAcmCertificateArn: !stack_output_external "sageit-org-acm-cert::CertificateArn"
   SourceHostedZoneId: "Z0478495257GEB73WFM63"
   TargetHostName: "self-service.clientvpn.amazonaws.com"
   TargetKey: "endpoints/cvpn-endpoint-055bd9db65af09d63"
